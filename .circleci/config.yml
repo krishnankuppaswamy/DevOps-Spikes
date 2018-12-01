@@ -9,6 +9,10 @@ jobs:
     # - image: <some image name here>
     steps:
     - checkout
+    - save_cache:
+        key: v1-repo-{{ .Environment.CIRCLE_SHA1 }}
+        paths:
+            - ~/work
     - run:
         name: Print the Current Time
         command: date
@@ -17,11 +21,20 @@ jobs:
         command: ls -lFR
     - store_artifacts:
         path: build-results.xml
+    - run:
+        name: Show folder content after checkout
+        command: ls -lFR
   test:
+    working_directory: ~/work
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
     - image: microsoft/dotnet
+    # # The secondary container is an instance of the second listed image which is run in a common network where ports exposed on the primary container are available on localhost.
+    # - image: <some image name here>
     steps:
-    - checkout
+    - restore_cache:
+        keys:
+            - v1-repo-{{ .Environment.CIRCLE_SHA1 }}
     - run:
         name: Print the Current Time
         command: date
@@ -30,6 +43,9 @@ jobs:
         command: ls -lFR
     - store_artifacts:
         path: test-results.xml
+    - run:
+        name: Show folder content after checkout
+        command: ls -lFR
 # orchestrating job with workflows - Begin
 
 # # Option: 1
