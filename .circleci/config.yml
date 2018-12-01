@@ -1,6 +1,8 @@
 version: 2
 jobs:
   build:
+    working_directory: ~/work
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
     - image: debian:stretch
     steps:
@@ -13,7 +15,7 @@ jobs:
         command: date
   test:
     docker:
-    - image: debian:stretch
+    - image: microsoft/dotnet
     steps:
     - checkout
     - run:
