@@ -22,9 +22,34 @@ jobs:
     - run:
         name: Print the Current Time
         command: date
+# orchestrating job with workflows - Begin
+
+# # Option: 1
+# # Example: orchestrating job runs with parallel workflow - Begin
+# workflows:
+#   version: 2
+#   workflow:
+#     jobs:
+#       - build
+#       - test
+#     filters:
+#     branches:
+#         only: master
+# # Example: orchestrating job runs with parallel workflow - End
+
+# Option: 2
+# Example: orchestrating job runs with sequential workflow - Begin
 workflows:
   version: 2
-  workflow:
+  build_and_test:
     jobs:
-    - build
-    - test    
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+# Example: orchestrating job runs with sequential workflow - End
+
+# orchestrating job with workflows - End
