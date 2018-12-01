@@ -41,6 +41,11 @@ jobs:
     - run:
         name: Show folder content after checkout
         command: ls -lFR
+    - store_test_results:
+        path: test_output/report.xml
+    - store_artifacts:
+        path: /tmp/test-results
+        destination: scan-test-results
     - store_artifacts:
         path: test-results.xml
     - run:
