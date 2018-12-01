@@ -2,34 +2,34 @@ version: 2
 jobs:
   build:
     working_directory: ~/work
-    # The primary container is an instance of the first image listed. The job's commands run in this container.
     docker:
-    - image: debian:stretch
+    # The primary container is an instance of the first image listed. The job's commands run in this container.
+    - image: microsoft/dotnet
+    # # The secondary container is an instance of the second listed image which is run in a common network where ports exposed on the primary container are available on localhost.
+    # - image: <some image name here>
     steps:
     - checkout
-    - run:
-        name: Greeting
-        command: echo Hello, world.
     - run:
         name: Print the Current Time
         command: date
     - run:
         name: Show folder content after checkout
         command: ls -lFR
+    - store_artifacts:
+        path: build-results.xml
   test:
     docker:
     - image: microsoft/dotnet
     steps:
     - checkout
     - run:
-        name: Greeting
-        command: echo Hello, world.
-    - run:
         name: Print the Current Time
         command: date
     - run:
         name: Show folder content after checkout
         command: ls -lFR
+    - store_artifacts:
+        path: test-results.xml
 # orchestrating job with workflows - Begin
 
 # # Option: 1
